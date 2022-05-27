@@ -3,9 +3,12 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/gozil/AndroidStudioProjects/git/DeliveryAPP/app/src/main/res/drawable-v24/bg_frame_gallery.xml" value="0.1615" />
         <entry key="..\:/Users/gozil/AndroidStudioProjects/git/DeliveryAPP/app/src/main/res/drawable-v24/bg_round_corner_8_black.xml" value="0.1615" />
         <entry key="..\:/Users/gozil/AndroidStudioProjects/git/DeliveryAPP/app/src/main/res/drawable-v24/button_round_corner_4_black_24.xml" value="0.1615" />
         <entry key="..\:/Users/gozil/AndroidStudioProjects/git/DeliveryAPP/app/src/main/res/drawable-v24/ic_back_arrow.xml" value="0.1615" />
+        <entry key="..\:/Users/gozil/AndroidStudioProjects/git/DeliveryAPP/app/src/main/res/drawable-v24/ic_close.xml" value="0.1615" />
+        <entry key="..\:/Users/gozil/AndroidStudioProjects/git/DeliveryAPP/app/src/main/res/drawable/bg_filter_chip_state_list.xml" value="0.1615" />
         <entry key="..\:/Users/gozil/AndroidStudioProjects/git/DeliveryAPP/app/src/main/res/drawable/ic_heart_disable.xml" value="0.1615" />
         <entry key="..\:/Users/gozil/AndroidStudioProjects/git/DeliveryAPP/app/src/main/res/layout/activity_main.xml" value="0.24010416666666667" />
         <entry key="..\:/Users/gozil/AndroidStudioProjects/git/DeliveryAPP/app/src/main/res/layout/fragment_home.xml" value="0.24010416666666667" />
