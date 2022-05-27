@@ -3,6 +3,7 @@ package com.project.deliveryapp
 import android.app.Application
 import android.content.Context
 import com.project.deliveryapp.di.appModule
+import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
 class DeliveryApplication: Application() {
@@ -12,6 +13,7 @@ class DeliveryApplication: Application() {
         appContext = this
 
         startKoin {
+            androidContext(this@DeliveryApplication)
             modules(appModule)
         }
     }
