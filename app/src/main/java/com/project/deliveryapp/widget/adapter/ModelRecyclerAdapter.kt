@@ -8,6 +8,7 @@ import com.project.deliveryapp.screen.base.BaseViewModel
 import com.project.deliveryapp.util.mapper.ModelViewHolderMapper
 import com.project.deliveryapp.util.provider.ResourcesProvider
 import com.project.deliveryapp.widget.adapter.listener.AdapterListener
+import com.project.deliveryapp.widget.adapter.listener.restaurant.RestaurantListListener
 import com.project.deliveryapp.widget.adapter.viewholder.ModelViewHolder
 
 class ModelRecyclerAdapter<M: Model, VM: BaseViewModel>(
@@ -33,7 +34,7 @@ class ModelRecyclerAdapter<M: Model, VM: BaseViewModel>(
         }
     }
 
-    override fun submitList(list: MutableList<Model>?) {
+    override fun submitList(list: List<Model>?) {
         list?.let { modelList = it }
         super.submitList(list)
     }
