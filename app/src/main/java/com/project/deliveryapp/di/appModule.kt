@@ -1,7 +1,7 @@
 package com.project.deliveryapp.di
 
-import com.project.deliveryapp.data.repository.DefaultRestaurantRepository
-import com.project.deliveryapp.data.repository.RestaurantRepository
+import com.project.deliveryapp.data.repository.restaurant.DefaultRestaurantRepository
+import com.project.deliveryapp.data.repository.restaurant.RestaurantRepository
 import com.project.deliveryapp.screen.main.home.HomeViewModel
 import com.project.deliveryapp.screen.main.home.restaurant.RestaurantCategory
 import com.project.deliveryapp.screen.main.home.restaurant.RestaurantListViewModel
