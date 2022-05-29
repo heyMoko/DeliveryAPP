@@ -8,6 +8,8 @@ import android.location.LocationListener
 import android.location.LocationManager
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import com.google.android.material.tabs.TabLayoutMediator
 import com.project.deliveryapp.R
 import com.project.deliveryapp.data.entity.LocationLatLngEntity
@@ -49,13 +51,7 @@ class HomeFragment: BaseFragment<HomeViewModel, FragmentHomeBinding>() {
             }
         }
 
-    override fun initViews() {
-        super.initViews()
-
-        initViewPager()
-    }
-
-    private fun initViewPager() = with(binding) {
+    private fun initViewPager(locationLatLng: LocationLatLngEntity) = with(binding) {
         val restaurantCategories = RestaurantCategory.values()
 
         if(::viewPagerAdapter.isInitialized.not()) {
@@ -76,9 +72,32 @@ class HomeFragment: BaseFragment<HomeViewModel, FragmentHomeBinding>() {
     }
 
     override fun observeData() = viewModel.homeStateLiveData.observe(viewLifecycleOwner) {
-        when(it) {
-            HomeState.UnInitialized ->
+        when (it) {
+            is HomeState.UnInitialized -> {
                 getMyLocation()
+            }
+            is HomeState.Loading -> {
+                binding.locationLoading.isVisible = true
+                binding.locationTitleText.text = getString(R.string.loading)
+            }
+            is HomeState.Success -> {
+                binding.locationLoading.isGone = true
+                binding.locationTitleText.text = it.mapSearchInfo.fullAddress
+                binding.tabLayout.isVisible = true
+                binding.filterScrollView.isVisible = true
+                binding.viewPager.isVisible = true
+
+                initViewPager(it.mapSearchInfo.locationLatLng)
+            }
+            is HomeState.Error -> {
+                binding.locationLoading.isGone = true
+                binding.locationTitleText.setText(R.string.location_not_found)
+                binding.locationTitleText.setOnClickListener {
+                    getMyLocation()
+                }
+
+                Toast.makeText(requireContext(), it.messageId, Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
@@ -128,7 +147,6 @@ class HomeFragment: BaseFragment<HomeViewModel, FragmentHomeBinding>() {
 
     inner class MyLocationListener: LocationListener {
         override fun onLocationChanged(location: Location) {
-           // binding.locationTitleText.text = "${location.latitude}, ${location.longitude}"
             viewModel.loadReverseGeoInformation(
                 LocationLatLngEntity(
                     location.latitude,

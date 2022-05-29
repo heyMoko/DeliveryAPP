@@ -1,7 +1,6 @@
 package com.project.deliveryapp.widget.adapter.viewholder.restaurant
 
 import com.project.deliveryapp.R
-import com.project.deliveryapp.databinding.ViewholderEmptyBinding
 import com.project.deliveryapp.databinding.ViewholderRestaurantBinding
 import com.project.deliveryapp.extensions.clear
 import com.project.deliveryapp.extensions.load

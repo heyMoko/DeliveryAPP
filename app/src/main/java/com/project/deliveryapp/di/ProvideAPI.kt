@@ -1,18 +1,24 @@
 package com.project.deliveryapp.di
 
 import com.project.deliveryapp.BuildConfig
+import com.project.deliveryapp.data.network.MapApiService
+import com.project.deliveryapp.data.url.Url
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
-fun provideRetrofit(
+fun provideMapApiService(retrofit: Retrofit): MapApiService {
+    return retrofit.create(MapApiService::class.java)
+}
+
+fun provideMapRetrofit(
     okHttpClient: OkHttpClient,
-    gsonConverterFactory: GsonConverterFactory
+    gsonConverterFactory: GsonConverterFactory,
 ): Retrofit {
     return Retrofit.Builder()
-        .baseUrl("")
+        .baseUrl(Url.TMAP_URL)
         .addConverterFactory(gsonConverterFactory)
         .client(okHttpClient)
         .build()
