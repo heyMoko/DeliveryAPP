@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.project.deliveryapp.R
 import com.project.deliveryapp.data.entity.LocationLatLngEntity
+import com.project.deliveryapp.data.entity.MapSearchInfoEntity
 import com.project.deliveryapp.data.repository.map.MapRepository
 import com.project.deliveryapp.screen.base.BaseViewModel
 import kotlinx.coroutines.launch
@@ -11,6 +12,10 @@ import kotlinx.coroutines.launch
 class HomeViewModel(
     private val mapRepository: MapRepository
 ): BaseViewModel() {
+
+    companion object {
+        const val MY_LOCATION_KEY = "MyLocation"
+    }
 
     val homeStateLiveData = MutableLiveData<HomeState>(HomeState.UnInitialized)
 
@@ -29,5 +34,12 @@ class HomeViewModel(
             )
         }
     }
-
+    fun getMapSearchInfo(): MapSearchInfoEntity? {
+        when (val data = homeStateLiveData.value) {
+            is HomeState.Success -> {
+                return data.mapSearchInfo
+            }
+        }
+        return null
+    }
 }

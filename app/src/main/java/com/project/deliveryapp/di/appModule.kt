@@ -1,5 +1,6 @@
 package com.project.deliveryapp.di
 
+import com.project.deliveryapp.data.entity.MapSearchInfoEntity
 import com.project.deliveryapp.data.repository.map.DefaultMapRepository
 import com.project.deliveryapp.data.repository.map.MapRepository
 import com.project.deliveryapp.data.repository.restaurant.DefaultRestaurantRepository
@@ -8,6 +9,7 @@ import com.project.deliveryapp.screen.main.home.HomeViewModel
 import com.project.deliveryapp.screen.main.home.restaurant.RestaurantCategory
 import com.project.deliveryapp.screen.main.home.restaurant.RestaurantListViewModel
 import com.project.deliveryapp.screen.main.my.MyViewModel
+import com.project.deliveryapp.screen.mylocation.MyLocationViewModel
 import com.project.deliveryapp.util.provider.DefaultResourcesProvider
 import com.project.deliveryapp.util.provider.ResourcesProvider
 import kotlinx.coroutines.Dispatchers
@@ -20,6 +22,7 @@ val appModule = module {
     viewModel { HomeViewModel(get()) }
     viewModel { MyViewModel() }
     viewModel { (restaurantCategory: RestaurantCategory) -> RestaurantListViewModel(restaurantCategory, get()) }
+    viewModel { (mapSearchInfoEntity: MapSearchInfoEntity) -> MyLocationViewModel(mapSearchInfoEntity) }
 
     single<RestaurantRepository> { DefaultRestaurantRepository(get(), get()) }
     single<MapRepository> { DefaultMapRepository(get(), get()) }
