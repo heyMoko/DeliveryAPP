@@ -3,6 +3,7 @@ package com.project.deliveryapp.screen.main.home.restaurant
 import android.util.Log
 import android.widget.Toast
 import androidx.core.os.bundleOf
+import com.project.deliveryapp.data.entity.LocationLatLngEntity
 import com.project.deliveryapp.databinding.FragmentRestaurantListBinding
 import com.project.deliveryapp.model.restaurant.RestaurantModel
 import com.project.deliveryapp.screen.base.BaseFragment
@@ -17,7 +18,14 @@ class RestaurantListFragment: BaseFragment<RestaurantListViewModel, FragmentRest
 
     private val restaurantCategory by lazy { arguments?.getSerializable(RESTAURANT_CATEGORY_KEY) as RestaurantCategory }
 
-    override val viewModel by viewModel<RestaurantListViewModel> { parametersOf(restaurantCategory) }
+    private val locationLatLng by lazy { arguments?.getParcelable<LocationLatLngEntity>(LOCATION_KEY) }
+
+    override val viewModel by viewModel<RestaurantListViewModel> {
+        parametersOf(
+            restaurantCategory,
+            locationLatLng
+        )
+    }
 
     override fun getViewBinding(): FragmentRestaurantListBinding = FragmentRestaurantListBinding.inflate(layoutInflater)
 
@@ -42,11 +50,16 @@ class RestaurantListFragment: BaseFragment<RestaurantListViewModel, FragmentRest
 
     companion object {
         const val RESTAURANT_CATEGORY_KEY = "restaurantCategory"
+        const val LOCATION_KEY = "location"
 
-        fun newInstance(restaurantCategory: RestaurantCategory): RestaurantListFragment {
+        fun newInstance(
+            restaurantCategory: RestaurantCategory,
+            locationLatLng: LocationLatLngEntity
+        ): RestaurantListFragment {
             return RestaurantListFragment().apply {
                 arguments = bundleOf(
-                    RESTAURANT_CATEGORY_KEY to restaurantCategory
+                    RESTAURANT_CATEGORY_KEY to restaurantCategory,
+                    LOCATION_KEY to locationLatLng
                 )
             }
         }

@@ -1,10 +1,13 @@
 package com.project.deliveryapp.di
 
+import com.project.deliveryapp.data.entity.LocationLatLngEntity
 import com.project.deliveryapp.data.entity.MapSearchInfoEntity
 import com.project.deliveryapp.data.repository.map.DefaultMapRepository
 import com.project.deliveryapp.data.repository.map.MapRepository
 import com.project.deliveryapp.data.repository.restaurant.DefaultRestaurantRepository
 import com.project.deliveryapp.data.repository.restaurant.RestaurantRepository
+import com.project.deliveryapp.data.repository.user.DefaultUserRepository
+import com.project.deliveryapp.data.repository.user.UserRepository
 import com.project.deliveryapp.screen.main.home.HomeViewModel
 import com.project.deliveryapp.screen.main.home.restaurant.RestaurantCategory
 import com.project.deliveryapp.screen.main.home.restaurant.RestaurantListViewModel
@@ -21,11 +24,13 @@ val appModule = module {
 
     viewModel { HomeViewModel(get()) }
     viewModel { MyViewModel() }
-    viewModel { (restaurantCategory: RestaurantCategory) -> RestaurantListViewModel(restaurantCategory, get()) }
-    viewModel { (mapSearchInfoEntity: MapSearchInfoEntity) -> MyLocationViewModel(mapSearchInfoEntity) }
+    viewModel { (restaurantCategory: RestaurantCategory, locationLatLng: LocationLatLngEntity) ->
+        RestaurantListViewModel(restaurantCategory, locationLatLng, get()) }
+    viewModel { (mapSearchInfoEntity: MapSearchInfoEntity) -> MyLocationViewModel(mapSearchInfoEntity, get(), get()) }
 
-    single<RestaurantRepository> { DefaultRestaurantRepository(get(), get()) }
+    single<RestaurantRepository> { DefaultRestaurantRepository(get(), get(), get()) }
     single<MapRepository> { DefaultMapRepository(get(), get()) }
+    single<UserRepository> { DefaultUserRepository(get(), get()) }
 
     single { provideGsonConvertFactory() }
     single { buildOkHttpClient() }
@@ -33,6 +38,9 @@ val appModule = module {
     single { provideMapRetrofit(get(), get()) }
 
     single { provideMapApiService(get()) }
+
+    single { provideDB(androidApplication()) }
+    single { provideLocationDao(get()) }
 
     single<ResourcesProvider> { DefaultResourcesProvider(androidApplication()) }
 
