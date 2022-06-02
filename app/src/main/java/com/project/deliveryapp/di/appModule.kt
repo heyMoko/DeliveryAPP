@@ -2,6 +2,7 @@ package com.project.deliveryapp.di
 
 import com.project.deliveryapp.data.entity.LocationLatLngEntity
 import com.project.deliveryapp.data.entity.MapSearchInfoEntity
+import com.project.deliveryapp.data.entity.RestaurantEntity
 import com.project.deliveryapp.data.repository.map.DefaultMapRepository
 import com.project.deliveryapp.data.repository.map.MapRepository
 import com.project.deliveryapp.data.repository.restaurant.DefaultRestaurantRepository
@@ -11,6 +12,7 @@ import com.project.deliveryapp.data.repository.user.UserRepository
 import com.project.deliveryapp.screen.main.home.HomeViewModel
 import com.project.deliveryapp.screen.main.home.restaurant.RestaurantCategory
 import com.project.deliveryapp.screen.main.home.restaurant.RestaurantListViewModel
+import com.project.deliveryapp.screen.main.home.restaurant.detail.RestaurantDetailViewModel
 import com.project.deliveryapp.screen.main.my.MyViewModel
 import com.project.deliveryapp.screen.mylocation.MyLocationViewModel
 import com.project.deliveryapp.util.provider.DefaultResourcesProvider
@@ -22,11 +24,13 @@ import org.koin.dsl.module
 
 val appModule = module {
 
-    viewModel { HomeViewModel(get()) }
+    viewModel { HomeViewModel(get(), get()) }
     viewModel { MyViewModel() }
     viewModel { (restaurantCategory: RestaurantCategory, locationLatLng: LocationLatLngEntity) ->
         RestaurantListViewModel(restaurantCategory, locationLatLng, get()) }
     viewModel { (mapSearchInfoEntity: MapSearchInfoEntity) -> MyLocationViewModel(mapSearchInfoEntity, get(), get()) }
+
+    viewModel { (restaurantEntity: RestaurantEntity) -> RestaurantDetailViewModel(restaurantEntity) }
 
     single<RestaurantRepository> { DefaultRestaurantRepository(get(), get(), get()) }
     single<MapRepository> { DefaultMapRepository(get(), get()) }

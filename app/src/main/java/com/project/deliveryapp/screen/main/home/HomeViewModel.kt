@@ -6,11 +6,13 @@ import com.project.deliveryapp.R
 import com.project.deliveryapp.data.entity.LocationLatLngEntity
 import com.project.deliveryapp.data.entity.MapSearchInfoEntity
 import com.project.deliveryapp.data.repository.map.MapRepository
+import com.project.deliveryapp.data.repository.user.UserRepository
 import com.project.deliveryapp.screen.base.BaseViewModel
 import kotlinx.coroutines.launch
 
 class HomeViewModel(
-    private val mapRepository: MapRepository
+    private val mapRepository: MapRepository,
+    private val userRepository: UserRepository
 ): BaseViewModel() {
 
     companion object {
@@ -23,10 +25,13 @@ class HomeViewModel(
         locationLatLngEntity: LocationLatLngEntity
     ) = viewModelScope.launch {
         homeStateLiveData.value = HomeState.Loading
-        val addressInfo = mapRepository.getReverseGeoInformation(locationLatLngEntity)
+        val userLocation = userRepository.getUserLocation()
+        val currentLocation = userLocation ?: locationLatLngEntity
+        val addressInfo = mapRepository.getReverseGeoInformation(currentLocation)
         addressInfo?.let { info ->
             homeStateLiveData.value = HomeState.Success(
-                mapSearchInfo = info.toSearchInfoEntity(locationLatLngEntity)
+                mapSearchInfo = info.toSearchInfoEntity(locationLatLngEntity),
+                isLocationSame = currentLocation == locationLatLngEntity
             )
         } ?: kotlin.run {
             homeStateLiveData.value = HomeState.Error(
