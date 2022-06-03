@@ -1,22 +1,28 @@
 package com.project.deliveryapp.screen.main.home.restaurant.detail
 
+import android.content.ClipDescription.MIMETYPE_TEXT_PLAIN
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
+import android.net.Uri
 import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import com.google.android.material.appbar.AppBarLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import com.project.deliveryapp.R
 import com.project.deliveryapp.data.entity.RestaurantEntity
+import com.project.deliveryapp.data.entity.RestaurantFoodEntity
 import com.project.deliveryapp.databinding.ActivityRestaurantDetailBinding
 import com.project.deliveryapp.extensions.fromDpToPx
 import com.project.deliveryapp.extensions.load
 import com.project.deliveryapp.screen.base.BaseActivity
 import com.project.deliveryapp.screen.main.home.restaurant.RestaurantListFragment
+import com.project.deliveryapp.screen.main.home.restaurant.detail.menu.RestaurantMenuListFragment
+import com.project.deliveryapp.screen.main.home.restaurant.detail.review.RestaurantReviewListFragment
+import com.project.deliveryapp.screen.main.home.restaurant.detail.review.RestaurantReviewListViewModel
+import com.project.deliveryapp.widget.adapter.RestaurantDetailListFragmentPagerAdapter
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
-import java.lang.Math.abs
 
 class RestaurantDetailActivity : BaseActivity<RestaurantDetailViewModel, ActivityRestaurantDetailBinding>() {
 
@@ -38,6 +44,8 @@ class RestaurantDetailActivity : BaseActivity<RestaurantDetailViewModel, Activit
         initAppBar()
     }
 
+    private lateinit var viewPagerAdapter: RestaurantDetailListFragmentPagerAdapter
+
     private fun initAppBar() = with(binding) {
         appbar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener{ appBarLayout, verticalOffset ->
             val topPadding = 300f.fromDpToPx().toFloat()
@@ -46,7 +54,7 @@ class RestaurantDetailActivity : BaseActivity<RestaurantDetailViewModel, Activit
 
             val realAlphaVerticalOffset: Float = if (abstractOffset - topPadding < 0) 0f else abstractOffset - topPadding
 
-            if (realAlphaVerticalOffset < topPadding) {
+            if (abstractOffset < topPadding) {
                 restaurantTitleTextView.alpha = 0f
                 return@OnOffsetChangedListener
             }
@@ -56,25 +64,50 @@ class RestaurantDetailActivity : BaseActivity<RestaurantDetailViewModel, Activit
         })
         toolbar.setNavigationOnClickListener { finish() }
         callButton.setOnClickListener {
-
+            viewModel.getRestaurantTelNumber()?.let { telNumber ->
+                val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:$telNumber"))
+                startActivity(intent)
+            }
         }
         likeButton.setOnClickListener {
-
+            viewModel.toggleLikedRestaurant()
         }
         shareButton.setOnClickListener {
-
+            viewModel.getRestaurantInfo()?.let { restaurantInfo ->
+                val intent = Intent(Intent.ACTION_SEND).apply {
+                    type = MIMETYPE_TEXT_PLAIN
+                    putExtra(
+                        Intent.EXTRA_TEXT,
+                        "맛있는 음식점 : ${restaurantInfo.restaurantTitle}" +
+                                "\n평점 : ${restaurantInfo.grade}" +
+                                "\n연락처 : ${restaurantInfo.restaurantTelNumber}"
+                    )
+                    Intent.createChooser(this, "친구에게 공유하기")
+                }
+                startActivity(intent)
+            }
         }
     }
 
     override fun observeData() = viewModel.restaurantDetailStateLiveData.observe(this) {
         when (it) {
+            is RestaurantDetailState.Loading -> {
+                handleLoading()
+            }
             is RestaurantDetailState.Success -> {
                 handleSuccess(it)
             }
+            else -> Unit
         }
     }
 
+    private fun handleLoading() = with(binding) {
+        progressBar.isVisible = true
+    }
+
     private fun handleSuccess(state: RestaurantDetailState.Success) = with(binding) {
+        progressBar.isGone = true
+
         val restaurantEntity = state.restaurantEntity
 
         callButton.isGone = restaurantEntity.restaurantTelNumber == null
@@ -96,6 +129,29 @@ class RestaurantDetailActivity : BaseActivity<RestaurantDetailViewModel, Activit
             }),
             null, null, null
         )
+        if (::viewPagerAdapter.isInitialized.not()) {
+            initViewPager(state.restaurantEntity.restaurantInfoId, state.restaurantFoodList)
+        }
+    }
 
+    private fun initViewPager(
+        restaurantInfoId: Long,
+        restaurantFoodList: List<RestaurantFoodEntity>?
+    ) {
+        viewPagerAdapter = RestaurantDetailListFragmentPagerAdapter(
+            this,
+            listOf(
+                RestaurantMenuListFragment.newInstance(
+                    restaurantInfoId, ArrayList(restaurantFoodList ?: listOf())
+                ),
+                RestaurantReviewListFragment.newInstance(
+                    restaurantInfoId
+                ),
+            )
+        )
+        binding.menuAndReviewViewPager.adapter = viewPagerAdapter
+        TabLayoutMediator(binding.menuAndReviewTabLayout, binding.menuAndReviewViewPager) { tab, position ->
+            tab.setText(RestaurantCategoryDetail.values()[position].categoryNameId)
+        }.attach()
     }
 }
