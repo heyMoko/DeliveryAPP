@@ -26,12 +26,14 @@ class RestaurantMenuListViewModel(
                 description = it.description,
                 price = it.price,
                 imageUrl = it.imageUrl,
-                restaurantId = restaurantId
+                restaurantId = restaurantId,
+                foodId = it.id
             )
         }
     }
 
-    fun insertMenuInBasket(model: FoodModel) = viewModelScope.launch {
-        val restaurantMenuListInBasket = restaurantFoodRepository.
+    fun insertMenuInBasket(foodModel: FoodModel) = viewModelScope.launch {
+        val restaurantMenuListInBasket = restaurantFoodRepository.getFoodMenuListInBasket(restaurantId)
+        val foodMenuEntity = foodModel.toEntity(restaurantMenuListInBasket.size)
     }
 }
