@@ -10,6 +10,8 @@ import com.project.deliveryapp.data.repository.restaurant.DefaultRestaurantRepos
 import com.project.deliveryapp.data.repository.restaurant.RestaurantRepository
 import com.project.deliveryapp.data.repository.restaurant.food.DefaultRestaurantFoodRepository
 import com.project.deliveryapp.data.repository.restaurant.food.RestaurantFoodRepository
+import com.project.deliveryapp.data.repository.restaurant.review.DefaultRestaurantReviewRepository
+import com.project.deliveryapp.data.repository.restaurant.review.RestaurantReviewRepository
 import com.project.deliveryapp.data.repository.user.DefaultUserRepository
 import com.project.deliveryapp.data.repository.user.UserRepository
 import com.project.deliveryapp.screen.main.home.HomeViewModel
@@ -30,7 +32,7 @@ import org.koin.dsl.module
 
 val appModule = module {
 
-    viewModel { HomeViewModel(get(), get()) }
+    viewModel { HomeViewModel(get(), get(), get()) }
     viewModel { MyViewModel() }
     viewModel { (restaurantCategory: RestaurantCategory, locationLatLng: LocationLatLngEntity) ->
         RestaurantListViewModel(restaurantCategory, locationLatLng, get()) }
@@ -41,12 +43,13 @@ val appModule = module {
     viewModel { (restaurantId: Long, restaurantFoodList: List<RestaurantFoodEntity>) ->
         RestaurantMenuListViewModel(restaurantId, restaurantFoodList, get())
     }
-    viewModel { RestaurantReviewListViewModel() }
+    viewModel { (restaurantTitle: String) -> RestaurantReviewListViewModel(restaurantTitle, get()) }
 
     single<RestaurantRepository> { DefaultRestaurantRepository(get(), get(), get()) }
     single<MapRepository> { DefaultMapRepository(get(), get()) }
     single<UserRepository> { DefaultUserRepository(get(), get(), get()) }
     single<RestaurantFoodRepository> { DefaultRestaurantFoodRepository(get(), get(), get()) }
+    single<RestaurantReviewRepository> {  DefaultRestaurantReviewRepository(get()) }
 
     single { provideGsonConvertFactory() }
     single { buildOkHttpClient() }

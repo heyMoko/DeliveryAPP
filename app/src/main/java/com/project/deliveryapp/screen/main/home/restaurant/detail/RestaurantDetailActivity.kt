@@ -4,6 +4,7 @@ import android.content.ClipDescription.MIMETYPE_TEXT_PLAIN
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
@@ -21,6 +22,7 @@ import com.project.deliveryapp.screen.main.home.restaurant.detail.menu.Restauran
 import com.project.deliveryapp.screen.main.home.restaurant.detail.review.RestaurantReviewListFragment
 import com.project.deliveryapp.screen.main.home.restaurant.detail.review.RestaurantReviewListViewModel
 import com.project.deliveryapp.widget.adapter.RestaurantDetailListFragmentPagerAdapter
+import okhttp3.internal.notify
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -130,12 +132,20 @@ class RestaurantDetailActivity : BaseActivity<RestaurantDetailViewModel, Activit
             null, null, null
         )
         if (::viewPagerAdapter.isInitialized.not()) {
-            initViewPager(state.restaurantEntity.restaurantInfoId, state.restaurantFoodList)
+            initViewPager(state.restaurantEntity.restaurantInfoId,state.restaurantEntity.restaurantTitle, state.restaurantFoodList)
+        }
+
+        notifyBasketCount(state.foodMenuListInBasket)
+
+        val (isClearNeed, afterAction) = state.isClearNeedInBasketAndAction
+        if (isClearNeed) {
+            alertClearNeedInBasket(afterAction)
         }
     }
 
     private fun initViewPager(
         restaurantInfoId: Long,
+        restaurantTitle: String,
         restaurantFoodList: List<RestaurantFoodEntity>?
     ) {
         viewPagerAdapter = RestaurantDetailListFragmentPagerAdapter(
@@ -145,7 +155,7 @@ class RestaurantDetailActivity : BaseActivity<RestaurantDetailViewModel, Activit
                     restaurantInfoId, ArrayList(restaurantFoodList ?: listOf())
                 ),
                 RestaurantReviewListFragment.newInstance(
-                    restaurantInfoId
+                    restaurantTitle
                 ),
             )
         )
@@ -153,5 +163,32 @@ class RestaurantDetailActivity : BaseActivity<RestaurantDetailViewModel, Activit
         TabLayoutMediator(binding.menuAndReviewTabLayout, binding.menuAndReviewViewPager) { tab, position ->
             tab.setText(RestaurantCategoryDetail.values()[position].categoryNameId)
         }.attach()
+    }
+
+    private fun notifyBasketCount(foodMenuListInBasket: List<RestaurantFoodEntity>?) = with(binding) {
+        basketCountTextView.text = if (foodMenuListInBasket.isNullOrEmpty()) {
+            "0"
+        } else {
+            getString(R.string.basket_count, foodMenuListInBasket.size)
+        }
+        basketButton.setOnClickListener {
+            // TODO 주문하기화면으로 이동 or 로그인
+        }
+    }
+
+    private fun alertClearNeedInBasket(afterAction: () -> Unit) {
+        AlertDialog.Builder(this)
+            .setTitle("장바구니에는 같은 가게의 메뉴만 담을 수 있습니다.")
+            .setMessage("선택하신 메뉴를 장바구니에 담을 경우 이전에 담은 메뉴가 삭제됩니다.")
+            .setPositiveButton("담기") { dialog, _ ->
+                viewModel.notifyClearBasket()
+                afterAction()
+                dialog.dismiss()
+            }
+            .setNegativeButton("취소") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .create()
+            .show()
     }
 }

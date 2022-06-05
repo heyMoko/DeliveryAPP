@@ -1,15 +1,18 @@
 package com.project.deliveryapp.screen.main.home.restaurant.detail.menu
 
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import com.project.deliveryapp.data.entity.RestaurantFoodEntity
 import com.project.deliveryapp.databinding.FragmentListBinding
 import com.project.deliveryapp.model.restaurant.food.FoodModel
 import com.project.deliveryapp.screen.base.BaseFragment
+import com.project.deliveryapp.screen.main.home.restaurant.detail.RestaurantDetailViewModel
 import com.project.deliveryapp.util.provider.ResourcesProvider
 import com.project.deliveryapp.widget.adapter.ModelRecyclerAdapter
 import com.project.deliveryapp.widget.adapter.listener.AdapterListener
 import com.project.deliveryapp.widget.adapter.listener.restaurant.FoodMenuListListener
 import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -26,6 +29,8 @@ class RestaurantMenuListFragment: BaseFragment<RestaurantMenuListViewModel, Frag
             restaurantFoodList
         )
     }
+
+    private val restaurantDetailViewModel by sharedViewModel<RestaurantDetailViewModel>()
 
     private val resourceProvider by inject<ResourcesProvider>()
 
@@ -46,8 +51,19 @@ class RestaurantMenuListFragment: BaseFragment<RestaurantMenuListViewModel, Frag
         binding.recyclerView.adapter = adapter
     }
 
-    override fun observeData() = viewModel.restaurantFoodListLiveData.observe(this) {
-        adapter.submitList(it)
+    override fun observeData() {
+        viewModel.restaurantFoodListLiveData.observe(viewLifecycleOwner) {
+            adapter.submitList(it)
+        }
+        viewModel.menuBasketLiveData.observe(viewLifecycleOwner) {
+            Toast.makeText(requireContext(), "장바구니에 담겼습니다. 메뉴 : ${it.title}", Toast.LENGTH_SHORT).show()
+            restaurantDetailViewModel.notifyFoodMenuListInBasket(it)
+        }
+        viewModel.isClearNeedInBasketLiveData.observe(viewLifecycleOwner) { (isClearNeed, afterAction) ->
+            if (isClearNeed) {
+                restaurantDetailViewModel.notifyClearNeedAlertInBasket(isClearNeed, afterAction)
+            }
+        }
     }
 
     companion object {
