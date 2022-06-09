@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 
 /**
- * 데이터 저장 및 로드 클래스
+ * 데이터 저장, 로드 클래스
  */
 class AppPreferenceManager(
     private val context: Context
