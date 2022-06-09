@@ -6,8 +6,8 @@ import com.project.deliveryapp.data.entity.RestaurantEntity
 @Dao
 interface RestaurantDao {
 
-//    @Query("SELECT * FROM RestaurantEntity")
-//    suspend fun getAll(): List<RestaurantEntity>
+    @Query("SELECT * FROM RestaurantEntity")
+    suspend fun getAll(): List<RestaurantEntity>
 
     @Query("SELECT * FROM RestaurantEntity WHERE restaurantTitle=:title")
     suspend fun get(title: String): RestaurantEntity?

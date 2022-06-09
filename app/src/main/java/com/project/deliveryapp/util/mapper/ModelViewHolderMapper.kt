@@ -2,10 +2,7 @@ package com.project.deliveryapp.util.mapper
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.project.deliveryapp.databinding.ViewholderEmptyBinding
-import com.project.deliveryapp.databinding.ViewholderFoodMenuBinding
-import com.project.deliveryapp.databinding.ViewholderRestaurantBinding
-import com.project.deliveryapp.databinding.ViewholderRestaurantReviewBinding
+import com.project.deliveryapp.databinding.*
 import com.project.deliveryapp.model.CellType
 import com.project.deliveryapp.model.Model
 import com.project.deliveryapp.screen.base.BaseViewModel
@@ -13,6 +10,7 @@ import com.project.deliveryapp.util.provider.ResourcesProvider
 import com.project.deliveryapp.widget.adapter.viewholder.EmptyViewHolder
 import com.project.deliveryapp.widget.adapter.viewholder.ModelViewHolder
 import com.project.deliveryapp.widget.adapter.viewholder.food.FoodMenuViewHolder
+import com.project.deliveryapp.widget.adapter.viewholder.restaurant.LikeRestaurantViewHolder
 import com.project.deliveryapp.widget.adapter.viewholder.restaurant.RestaurantViewHolder
 import com.project.deliveryapp.widget.adapter.viewholder.review.RestaurantReviewViewHolder
 
@@ -34,6 +32,10 @@ object ModelViewHolderMapper {
             )
             CellType.RESTAURANT_CELL -> RestaurantViewHolder(
                 ViewholderRestaurantBinding.inflate(inflater, parent, false),
+                viewModel, resourcesProvider
+            )
+            CellType.LIKE_RESTAURANT_CELL -> LikeRestaurantViewHolder(
+                ViewholderLikeRestaurantBinding.inflate(inflater, parent, false),
                 viewModel, resourcesProvider
             )
             CellType.FOOD_CELL -> FoodMenuViewHolder(
