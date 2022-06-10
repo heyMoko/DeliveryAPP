@@ -1,5 +1,7 @@
 package com.project.deliveryapp.di
 
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.project.deliveryapp.data.entity.LocationLatLngEntity
 import com.project.deliveryapp.data.entity.MapSearchInfoEntity
 import com.project.deliveryapp.data.entity.RestaurantEntity
@@ -7,6 +9,8 @@ import com.project.deliveryapp.data.entity.RestaurantFoodEntity
 import com.project.deliveryapp.data.preference.AppPreferenceManager
 import com.project.deliveryapp.data.repository.map.DefaultMapRepository
 import com.project.deliveryapp.data.repository.map.MapRepository
+import com.project.deliveryapp.data.repository.order.DefaultOrderRepository
+import com.project.deliveryapp.data.repository.order.OrderRepository
 import com.project.deliveryapp.data.repository.restaurant.DefaultRestaurantRepository
 import com.project.deliveryapp.data.repository.restaurant.RestaurantRepository
 import com.project.deliveryapp.data.repository.restaurant.food.DefaultRestaurantFoodRepository
@@ -24,6 +28,8 @@ import com.project.deliveryapp.screen.main.home.restaurant.detail.review.Restaur
 import com.project.deliveryapp.screen.main.like.RestaurantLikeListViewModel
 import com.project.deliveryapp.screen.main.my.MyViewModel
 import com.project.deliveryapp.screen.mylocation.MyLocationViewModel
+import com.project.deliveryapp.screen.order.OrderMenuListViewModel
+import com.project.deliveryapp.util.event.MenuChangeEventBus
 import com.project.deliveryapp.util.provider.DefaultResourcesProvider
 import com.project.deliveryapp.util.provider.ResourcesProvider
 import kotlinx.coroutines.Dispatchers
@@ -35,7 +41,7 @@ import org.koin.dsl.module
 val appModule = module {
 
     viewModel { HomeViewModel(get(), get(), get()) }
-    viewModel { MyViewModel(get()) }
+    viewModel { MyViewModel(get(), get(), get()) }
 
     viewModel { (restaurantCategory: RestaurantCategory, locationLatLng: LocationLatLngEntity) ->
         RestaurantListViewModel(restaurantCategory, locationLatLng, get()) }
@@ -47,6 +53,7 @@ val appModule = module {
         RestaurantMenuListViewModel(restaurantId, restaurantFoodList, get())
     }
     viewModel { (restaurantTitle: String) -> RestaurantReviewListViewModel(restaurantTitle, get()) }
+    viewModel { OrderMenuListViewModel(get(), get()) }
 
     viewModel { RestaurantLikeListViewModel(get()) }
 
@@ -55,6 +62,7 @@ val appModule = module {
     single<UserRepository> { DefaultUserRepository(get(), get(), get()) }
     single<RestaurantFoodRepository> { DefaultRestaurantFoodRepository(get(), get(), get()) }
     single<RestaurantReviewRepository> {  DefaultRestaurantReviewRepository(get()) }
+    single<OrderRepository> { DefaultOrderRepository(get(), get()) }
 
     single { provideGsonConvertFactory() }
     single { buildOkHttpClient() }
@@ -75,5 +83,9 @@ val appModule = module {
 
     single { Dispatchers.IO }
     single { Dispatchers.Main }
+
+    single { MenuChangeEventBus() }
+
+    single { Firebase.firestore }
 
 }

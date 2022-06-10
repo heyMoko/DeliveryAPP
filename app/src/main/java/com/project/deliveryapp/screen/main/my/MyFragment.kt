@@ -12,7 +12,12 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.project.deliveryapp.R
 import com.project.deliveryapp.databinding.FragmentMyBinding
 import com.project.deliveryapp.extensions.load
+import com.project.deliveryapp.model.restaurant.order.OrderModel
 import com.project.deliveryapp.screen.base.BaseFragment
+import com.project.deliveryapp.util.provider.ResourcesProvider
+import com.project.deliveryapp.widget.adapter.ModelRecyclerAdapter
+import com.project.deliveryapp.widget.adapter.listener.AdapterListener
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.lang.Exception
 
@@ -46,6 +51,12 @@ class MyFragment: BaseFragment<MyViewModel, FragmentMyBinding>() {
         }
     }
 
+    private val resourcesProvider by inject<ResourcesProvider>()
+
+    private val adapter by lazy {
+        ModelRecyclerAdapter<OrderModel, MyViewModel>(listOf(), viewModel, resourcesProvider, object : AdapterListener {})
+    }
+
     override fun initViews() = with(binding) {
         loginButton.setOnClickListener {
             signInGoogle()
@@ -54,6 +65,7 @@ class MyFragment: BaseFragment<MyViewModel, FragmentMyBinding>() {
             firebaseAuth.signOut()
             viewModel.signOut()
         }
+        recyclerView.adapter = adapter
     }
 
     private fun signInGoogle() {
@@ -102,6 +114,7 @@ class MyFragment: BaseFragment<MyViewModel, FragmentMyBinding>() {
         loginRequiredGroup.isGone = true
         profileImageView.load(state.profileImageUri.toString(), 60f)
         userNameTextView.text = state.userName
+        adapter.submitList(state.orderList)
     }
 
     private fun handleLoginState(state: MyState.Login) {
