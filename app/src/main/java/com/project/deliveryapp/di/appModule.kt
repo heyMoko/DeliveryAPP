@@ -1,7 +1,9 @@
 package com.project.deliveryapp.di
 
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
 import com.project.deliveryapp.data.entity.LocationLatLngEntity
 import com.project.deliveryapp.data.entity.MapSearchInfoEntity
 import com.project.deliveryapp.data.entity.RestaurantEntity
@@ -44,7 +46,9 @@ val appModule = module {
     viewModel { MyViewModel(get(), get(), get()) }
 
     viewModel { (restaurantCategory: RestaurantCategory, locationLatLng: LocationLatLngEntity) ->
-        RestaurantListViewModel(restaurantCategory, locationLatLng, get()) }
+        RestaurantListViewModel(restaurantCategory, locationLatLng, get())
+    }
+
     viewModel { (mapSearchInfoEntity: MapSearchInfoEntity) -> MyLocationViewModel(mapSearchInfoEntity, get(), get()) }
 
     viewModel { (restaurantEntity: RestaurantEntity) -> RestaurantDetailViewModel(restaurantEntity, get(), get()) }
@@ -53,7 +57,7 @@ val appModule = module {
         RestaurantMenuListViewModel(restaurantId, restaurantFoodList, get())
     }
     viewModel { (restaurantTitle: String) -> RestaurantReviewListViewModel(restaurantTitle, get()) }
-    viewModel { OrderMenuListViewModel(get(), get()) }
+    viewModel { (firebaseAuth: FirebaseAuth) -> OrderMenuListViewModel(get(), get(), firebaseAuth) }
 
     viewModel { RestaurantLikeListViewModel(get()) }
 
@@ -61,7 +65,7 @@ val appModule = module {
     single<MapRepository> { DefaultMapRepository(get(), get()) }
     single<UserRepository> { DefaultUserRepository(get(), get(), get()) }
     single<RestaurantFoodRepository> { DefaultRestaurantFoodRepository(get(), get(), get()) }
-    single<RestaurantReviewRepository> {  DefaultRestaurantReviewRepository(get()) }
+    single<RestaurantReviewRepository> {  DefaultRestaurantReviewRepository(get(), get()) }
     single<OrderRepository> { DefaultOrderRepository(get(), get()) }
 
     single { provideGsonConvertFactory() }
@@ -87,5 +91,7 @@ val appModule = module {
     single { MenuChangeEventBus() }
 
     single { Firebase.firestore }
+    single { FirebaseAuth.getInstance() }
+    single { FirebaseStorage.getInstance() }
 
 }

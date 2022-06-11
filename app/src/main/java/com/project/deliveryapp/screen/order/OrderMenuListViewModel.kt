@@ -15,11 +15,10 @@ import kotlinx.coroutines.launch
 import java.lang.IllegalStateException
 
 class OrderMenuListViewModel(
-   private val restaurantFoodRepository: RestaurantFoodRepository,
-   private val orderRepository: OrderRepository
+    private val restaurantFoodRepository: RestaurantFoodRepository,
+    private val orderRepository: OrderRepository,
+    private val firebaseAuth: FirebaseAuth
 ): BaseViewModel() {
-
-    private val firebaseAuth by lazy { FirebaseAuth.getInstance() }
 
     val orderMenuStateLiveData = MutableLiveData<OrderMenuState>(OrderMenuState.Uninitialized)
 

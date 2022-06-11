@@ -7,6 +7,7 @@ import com.project.deliveryapp.model.restaurant.order.OrderModel
 import com.project.deliveryapp.screen.base.BaseViewModel
 import com.project.deliveryapp.util.provider.ResourcesProvider
 import com.project.deliveryapp.widget.adapter.listener.AdapterListener
+import com.project.deliveryapp.widget.adapter.listener.order.OrderListListener
 import com.project.deliveryapp.widget.adapter.viewholder.ModelViewHolder
 
 class OrderViewHolder(
@@ -41,5 +42,11 @@ class OrderViewHolder(
         }
     }
 
-    override fun bindViews(model: OrderModel, adapterListener: AdapterListener) = Unit
+    override fun bindViews(model: OrderModel, adapterListener: AdapterListener) {
+        if (adapterListener is OrderListListener) {
+            binding.root.setOnClickListener {
+                adapterListener.writeRestaurantReview(model.orderId, model.restaurantTitle)
+            }
+        }
+    }
 }

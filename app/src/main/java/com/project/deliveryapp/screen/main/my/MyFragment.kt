@@ -14,9 +14,11 @@ import com.project.deliveryapp.databinding.FragmentMyBinding
 import com.project.deliveryapp.extensions.load
 import com.project.deliveryapp.model.restaurant.order.OrderModel
 import com.project.deliveryapp.screen.base.BaseFragment
+import com.project.deliveryapp.screen.review.AddRestaurantReviewActivity
 import com.project.deliveryapp.util.provider.ResourcesProvider
 import com.project.deliveryapp.widget.adapter.ModelRecyclerAdapter
 import com.project.deliveryapp.widget.adapter.listener.AdapterListener
+import com.project.deliveryapp.widget.adapter.listener.order.OrderListListener
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.lang.Exception
@@ -54,7 +56,15 @@ class MyFragment: BaseFragment<MyViewModel, FragmentMyBinding>() {
     private val resourcesProvider by inject<ResourcesProvider>()
 
     private val adapter by lazy {
-        ModelRecyclerAdapter<OrderModel, MyViewModel>(listOf(), viewModel, resourcesProvider, object : AdapterListener {})
+        ModelRecyclerAdapter<OrderModel, MyViewModel>(listOf(), viewModel, resourcesProvider, object : OrderListListener {
+
+            override fun writeRestaurantReview(orderId: String, restaurantTitle: String) {
+                startActivity(
+                    AddRestaurantReviewActivity.newIntent(requireContext(), orderId, restaurantTitle)
+                )
+            }
+
+        })
     }
 
     override fun initViews() = with(binding) {

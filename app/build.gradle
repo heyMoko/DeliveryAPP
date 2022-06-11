@@ -88,4 +88,22 @@ dependencies {
     implementation 'com.google.firebase:firebase-firestore-ktx'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.3.9'
     implementation 'com.google.firebase:firebase-storage-ktx'
- }
+
+    // cameraX
+    def camerax_version = "1.2.0-alpha01"
+
+    implementation "androidx.camera:camera-core:${camerax_version}"
+    implementation "androidx.camera:camera-camera2:${camerax_version}"
+    implementation "androidx.camera:camera-lifecycle:${camerax_version}"
+    implementation "androidx.camera:camera-video:${camerax_version}"
+    implementation "androidx.camera:camera-view:${camerax_version}"
+
+    // circle indicator
+    implementation 'me.relex:circleindicator:2.1.6'
+
+    // test
+    testImplementation "io.insert-koin:koin-test:3.2.0"
+    testImplementation "org.mockito:mockito-inline:3.4.0"
+    testImplementation "android.arch.core:core-testing:1.1.1"
+
+}

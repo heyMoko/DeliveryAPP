@@ -10,6 +10,10 @@
         <entry key="..\:/Users/gozil/AndroidStudioProjects/git/DeliveryAPP/app/src/main/res/drawable-v24/ic_close.xml" value="0.1615" />
         <entry key="..\:/Users/gozil/AndroidStudioProjects/git/DeliveryAPP/app/src/main/res/drawable/bg_filter_chip_state_list.xml" value="0.1615" />
         <entry key="..\:/Users/gozil/AndroidStudioProjects/git/DeliveryAPP/app/src/main/res/drawable/ic_heart_disable.xml" value="0.1615" />
+        <entry key="..\:/Users/gozil/AndroidStudioProjects/git/DeliveryAPP/app/src/main/res/layout/activity_add_restaurant_review.xml" value="0.24010416666666667" />
+        <entry key="..\:/Users/gozil/AndroidStudioProjects/git/DeliveryAPP/app/src/main/res/layout/activity_camera.xml" value="0.24010416666666667" />
+        <entry key="..\:/Users/gozil/AndroidStudioProjects/git/DeliveryAPP/app/src/main/res/layout/activity_gallery.xml" value="0.24010416666666667" />
+        <entry key="..\:/Users/gozil/AndroidStudioProjects/git/DeliveryAPP/app/src/main/res/layout/activity_image_preview_list.xml" value="0.24010416666666667" />
         <entry key="..\:/Users/gozil/AndroidStudioProjects/git/DeliveryAPP/app/src/main/res/layout/activity_main.xml" value="0.24010416666666667" />
         <entry key="..\:/Users/gozil/AndroidStudioProjects/git/DeliveryAPP/app/src/main/res/layout/activity_my_location.xml" value="0.13176470588235295" />
         <entry key="..\:/Users/gozil/AndroidStudioProjects/git/DeliveryAPP/app/src/main/res/layout/activity_order_menu_list.xml" value="0.24010416666666667" />
@@ -22,9 +26,12 @@
         <entry key="..\:/Users/gozil/AndroidStudioProjects/git/DeliveryAPP/app/src/main/res/layout/test.xml" value="0.264" />
         <entry key="..\:/Users/gozil/AndroidStudioProjects/git/DeliveryAPP/app/src/main/res/layout/viewholder_empty.xml" value="0.24010416666666667" />
         <entry key="..\:/Users/gozil/AndroidStudioProjects/git/DeliveryAPP/app/src/main/res/layout/viewholder_food_menu.xml" value="0.24010416666666667" />
+        <entry key="..\:/Users/gozil/AndroidStudioProjects/git/DeliveryAPP/app/src/main/res/layout/viewholder_gallery_photo_item.xml" value="0.24010416666666667" />
+        <entry key="..\:/Users/gozil/AndroidStudioProjects/git/DeliveryAPP/app/src/main/res/layout/viewholder_image.xml" value="0.24010416666666667" />
         <entry key="..\:/Users/gozil/AndroidStudioProjects/git/DeliveryAPP/app/src/main/res/layout/viewholder_like_restaurant.xml" value="0.24010416666666667" />
         <entry key="..\:/Users/gozil/AndroidStudioProjects/git/DeliveryAPP/app/src/main/res/layout/viewholder_order.xml" value="0.24010416666666667" />
         <entry key="..\:/Users/gozil/AndroidStudioProjects/git/DeliveryAPP/app/src/main/res/layout/viewholder_order_menu.xml" value="0.24010416666666667" />
+        <entry key="..\:/Users/gozil/AndroidStudioProjects/git/DeliveryAPP/app/src/main/res/layout/viewholder_photo_item.xml" value="0.24010416666666667" />
         <entry key="..\:/Users/gozil/AndroidStudioProjects/git/DeliveryAPP/app/src/main/res/layout/viewholder_restaurant.xml" value="0.24010416666666667" />
         <entry key="..\:/Users/gozil/AndroidStudioProjects/git/DeliveryAPP/app/src/main/res/layout/viewholder_restaurant_review.xml" value="0.24010416666666667" />
         <entry key="..\:/Users/gozil/AndroidStudioProjects/git/DeliveryAPP/app/src/main/res/menu/bottom_navigation_menu.xml" value="0.24010416666666667" />

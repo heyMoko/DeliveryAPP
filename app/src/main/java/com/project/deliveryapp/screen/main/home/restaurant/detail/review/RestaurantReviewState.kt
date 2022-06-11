@@ -1,6 +1,5 @@
 package com.project.deliveryapp.screen.main.home.restaurant.detail.review
 
-import com.project.deliveryapp.data.entity.RestaurantReviewEntity
 import com.project.deliveryapp.model.restaurant.review.RestaurantReviewModel
 
 sealed class RestaurantReviewState {
